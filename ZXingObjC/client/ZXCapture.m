@@ -211,13 +211,21 @@
 }
 
 - (BOOL)hasFront {
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  return [devices count] > 1;
+    AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession  = [AVCaptureDeviceDiscoverySession
+                        discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+                        mediaType:AVMediaTypeVideo
+                        position: AVCaptureDevicePositionFront];
+    NSArray *captureDevices = [captureDeviceDiscoverySession devices];
+    return [captureDevices count] > 0;
 }
 
 - (BOOL)hasBack {
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  return [devices count] > 0;
+    AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession  = [AVCaptureDeviceDiscoverySession
+                                                                       discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+                                                                       mediaType:AVMediaTypeVideo
+                                                                       position: AVCaptureDevicePositionBack];
+    NSArray *captureDevices = [captureDeviceDiscoverySession devices];
+    return [captureDevices count] > 0;
 }
 
 - (BOOL)hasTorch {
@@ -521,9 +529,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   }
   
   AVCaptureDevice *zxd = nil;
-  
-  NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-  
+
+    AVCaptureDeviceDiscoverySession *captureDeviceDiscoverySession  = [AVCaptureDeviceDiscoverySession
+                                                                       discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera]
+                                                                       mediaType:AVMediaTypeVideo
+                                                                       position: AVCaptureDevicePositionUnspecified];
+    NSArray *devices = [captureDeviceDiscoverySession devices];
+
   if ([devices count] > 0) {
     if (self.captureDeviceIndex == -1) {
       AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
